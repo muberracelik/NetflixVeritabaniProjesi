@@ -23,3 +23,5 @@
 hs_err_pid*
 /mtflix/nbproject/private/
 /nbproject/private/
+/build/
+/dist/
