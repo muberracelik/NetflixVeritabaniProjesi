@@ -6,7 +6,6 @@ import java.awt.Color;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Lenovo
@@ -16,10 +15,13 @@ public class Register extends javax.swing.JPanel {
     /**
      * Creates new form Login
      */
+    int yapildimi = 0;
+
     public Register() {
         initComponents();
-        this.setBackground(Color.BLACK );
-             
+        this.setBackground(Color.BLACK);
+        parola.setEchoChar((char) 0);
+        parolaOnay.setEchoChar((char) 0);
     }
 
     /**
@@ -43,6 +45,8 @@ public class Register extends javax.swing.JPanel {
         netflixLogosu = new javax.swing.JLabel();
         parola = new javax.swing.JPasswordField();
         pwdIcon1 = new javax.swing.JLabel();
+        bdaysecici = new com.toedter.calendar.JDateChooser();
+        backIcon = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(800, 600));
         setLayout(null);
@@ -70,7 +74,7 @@ public class Register extends javax.swing.JPanel {
         parolaOnay.setBackground(new java.awt.Color(0, 0, 0));
         parolaOnay.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
         parolaOnay.setForeground(new java.awt.Color(255, 255, 255));
-        parolaOnay.setText("*********");
+        parolaOnay.setText("Parola Onay");
         parolaOnay.setPreferredSize(new java.awt.Dimension(79, 23));
         parolaOnay.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -83,6 +87,11 @@ public class Register extends javax.swing.JPanel {
         okIcon.setBackground(new java.awt.Color(0, 0, 0));
         okIcon.setForeground(new java.awt.Color(255, 255, 255));
         okIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ok.jpg"))); // NOI18N
+        okIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                okIconMouseClicked(evt);
+            }
+        });
         add(okIcon);
         okIcon.setBounds(470, 490, 20, 30);
 
@@ -96,7 +105,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         add(bday);
-        bday.setBounds(290, 340, 170, 30);
+        bday.setBounds(290, 340, 150, 30);
 
         bdayIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/bday.jpg"))); // NOI18N
         add(bdayIcon);
@@ -125,7 +134,7 @@ public class Register extends javax.swing.JPanel {
         parola.setBackground(new java.awt.Color(0, 0, 0));
         parola.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
         parola.setForeground(new java.awt.Color(255, 255, 255));
-        parola.setText("Parolddda");
+        parola.setText("Parola");
         parola.setPreferredSize(new java.awt.Dimension(79, 23));
         parola.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -138,35 +147,141 @@ public class Register extends javax.swing.JPanel {
         pwdIcon1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/parola.jpg"))); // NOI18N
         add(pwdIcon1);
         pwdIcon1.setBounds(470, 440, 30, 30);
+
+        bdaysecici.setBackground(new java.awt.Color(153, 255, 153));
+        bdaysecici.setForeground(new java.awt.Color(153, 255, 102));
+        bdaysecici.setToolTipText("");
+        bdaysecici.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                bdayseciciPropertyChange(evt);
+            }
+        });
+        add(bdaysecici);
+        bdaysecici.setBounds(440, 340, 20, 30);
+
+        backIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/back.jpg"))); // NOI18N
+        backIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backIconMouseClicked(evt);
+            }
+        });
+        add(backIcon);
+        backIcon.setBounds(0, 0, 50, 50);
     }// </editor-fold>//GEN-END:initComponents
 
     private void epostaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_epostaMouseClicked
-        
+        eposta.setForeground(Color.white);
         eposta.setText("");
     }//GEN-LAST:event_epostaMouseClicked
 
     private void parolaOnayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parolaOnayMouseClicked
+        parolaOnay.setForeground(Color.white);
         parolaOnay.setText("");
         pwdIcon.setVisible(false);
+        parolaOnay.setEchoChar('*');
     }//GEN-LAST:event_parolaOnayMouseClicked
 
     private void isimMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_isimMouseClicked
-       isim.setText("");
+        isim.setForeground(Color.white);
+        isim.setText("");
     }//GEN-LAST:event_isimMouseClicked
 
     private void bdayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bdayMouseClicked
+        bday.setForeground(Color.white);
         bday.setText("");
     }//GEN-LAST:event_bdayMouseClicked
 
     private void parolaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parolaMouseClicked
-        // TODO add your handling code here:
+        parola.setForeground(Color.white);
         parola.setText("");
+
+        parola.setEchoChar('*'); //password = JPasswordField
+
     }//GEN-LAST:event_parolaMouseClicked
+
+    private void okIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okIconMouseClicked
+        boolean hata = false;
+        if (isim.getText().equals("") || isim.getText().equals("Ad-Soyad")) {
+            isim.setForeground(Color.red);
+            isim.setText("*Ad-Soyad giriniz!");
+            hata = true;
+        } else {
+
+        }
+
+        if (bday.getText().equals("") || bday.getText().equals("Doğum Tarihi")) {
+            bday.setForeground(Color.red);
+            bday.setText("*Doğum Tarihi giriniz!");
+            hata = true;
+        } else {
+
+        }
+
+        if (eposta.getText().equals("") || eposta.getText().equals("E-posta")) {
+            eposta.setForeground(Color.red);
+            eposta.setText("*E-Posta giriniz!");
+            hata = true;
+        } else {
+
+        }
+
+        if (String.valueOf(parola.getPassword()).equals("") || String.valueOf(parola.getPassword()).equals("Parola")) {
+            parola.setForeground(Color.red);
+            parola.setEchoChar((char) 0);
+            parola.setText("*Parola giriniz!");
+            hata = true;
+        } else {
+
+        }
+
+        if (String.valueOf(parolaOnay.getPassword()).equals("") || String.valueOf(parolaOnay.getPassword()).equals("Parola Onay")) {
+            parolaOnay.setForeground(Color.red);
+            parolaOnay.setEchoChar((char) 0);
+            parolaOnay.setText("*Parolanızı tekrar giriniz!");
+            hata = true;
+        } else {
+
+        }
+        if (!String.valueOf(parolaOnay.getPassword()).equals(String.valueOf(parola.getPassword()))) {
+            parola.setForeground(Color.red);
+            parolaOnay.setForeground(Color.red);
+            parola.setEchoChar((char) 0);
+            parolaOnay.setEchoChar((char) 0);
+            parola.setText("*Parolalar Uyuşmuyor!");
+            parolaOnay.setText("*Parolalar Uyuşmuyor!");
+            hata = true;
+        }
+        if (hata == false) {
+            this.setVisible(false);
+            Main.ekran.login.setVisible(true);
+            Main.ekran.login.setSize(800, 600);
+            Main.ekran.remove(this);
+        }
+
+    }//GEN-LAST:event_okIconMouseClicked
+
+    private void bdayseciciPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_bdayseciciPropertyChange
+        yapildimi++;
+        if (yapildimi > 1) {
+            String date = String.valueOf(bdaysecici.getDate());
+            String splitt[] = date.split(" ");
+            String lastdate = splitt[2] + "." + splitt[1] + "." + splitt[5];
+            bday.setText(lastdate);
+        }
+    }//GEN-LAST:event_bdayseciciPropertyChange
+
+    private void backIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backIconMouseClicked
+        this.setVisible(false);
+        Main.ekran.login.setVisible(true);
+        Main.ekran.login.setSize(800, 600);
+    }//GEN-LAST:event_backIconMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel backIcon;
     private javax.swing.JTextField bday;
     private javax.swing.JLabel bdayIcon;
+    private com.toedter.calendar.JDateChooser bdaysecici;
     private javax.swing.JTextField eposta;
     private javax.swing.JTextField isim;
     private javax.swing.JLabel kisilerIcon;

@@ -33,7 +33,7 @@ public class AnaEkran extends javax.swing.JFrame {
         this.setLocation((Main.ekranX - 800) / 2, (Main.ekranY - 600) / 2);
         karsilama.setVisible(true);
         try {
-            Thread.sleep(4500);
+            Thread.sleep(0);
         } catch (InterruptedException ex) {
             Logger.getLogger(AnaEkran.class.getName()).log(Level.SEVERE, null, ex);
         }

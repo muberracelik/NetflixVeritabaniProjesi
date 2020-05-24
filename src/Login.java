@@ -16,11 +16,12 @@ public class Login extends javax.swing.JPanel {
     /**
      * Creates new form Login
      */
+     Register register;            
     public Login() {
         initComponents();
         this.setBackground(Color.BLACK );        
         okIcon.setVisible(false);
-        
+         parola.setEchoChar((char)0);
         
              
     }
@@ -40,7 +41,7 @@ public class Login extends javax.swing.JPanel {
         eposta = new javax.swing.JTextField();
         mailIcon = new javax.swing.JLabel();
         parola = new javax.swing.JPasswordField();
-        jLabel1 = new javax.swing.JLabel();
+        kaydol = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(800, 600));
         setLayout(null);
@@ -78,7 +79,7 @@ public class Login extends javax.swing.JPanel {
         parola.setBackground(new java.awt.Color(0, 0, 0));
         parola.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
         parola.setForeground(new java.awt.Color(255, 255, 255));
-        parola.setText("Parolddda");
+        parola.setText("Parola");
         parola.setPreferredSize(new java.awt.Dimension(79, 23));
         parola.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -88,43 +89,43 @@ public class Login extends javax.swing.JPanel {
         add(parola);
         parola.setBounds(290, 380, 170, 30);
 
-        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel1.setText("Şimdi Kaydol");
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        kaydol.setBackground(new java.awt.Color(0, 0, 0));
+        kaydol.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        kaydol.setForeground(new java.awt.Color(204, 204, 204));
+        kaydol.setText("Şimdi Kaydol");
+        kaydol.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+                kaydolMouseClicked(evt);
             }
         });
-        add(jLabel1);
-        jLabel1.setBounds(340, 470, 120, 30);
+        add(kaydol);
+        kaydol.setBounds(340, 470, 120, 30);
     }// </editor-fold>//GEN-END:initComponents
 
     private void epostaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_epostaMouseClicked
-        
-        eposta.setText("");
+ eposta.setText("");
     }//GEN-LAST:event_epostaMouseClicked
 
     private void parolaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parolaMouseClicked
         parola.setText("");
         pwdIcon.setVisible(false);
         okIcon.setVisible(true);
+     parola.setEchoChar('*');
     }//GEN-LAST:event_parolaMouseClicked
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+    private void kaydolMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kaydolMouseClicked
         // TODO add your handling code here:
-        Register register =new Register();            
+        register =new Register();            
         this.setVisible(true);
-        this.setSize(700,590);
+        this.setSize(800,600);
         Main.ekran.add(register);
         Main.ekran.login.setVisible(false);
-    }//GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_kaydolMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField eposta;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel kaydol;
     private javax.swing.JLabel mailIcon;
     private javax.swing.JLabel netflixLogosu;
     private javax.swing.JLabel okIcon;
