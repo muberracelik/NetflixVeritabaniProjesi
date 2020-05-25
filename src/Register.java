@@ -769,9 +769,14 @@ public class Register extends javax.swing.JPanel {
         yapildimi++;
         if (yapildimi > 1) {
             String date = String.valueOf(bdaysecici.getDate());
-            String splitt[] = date.split(" ");
-            String lastdate = splitt[2] + "." + splitt[1] + "." + splitt[5];
-            bday.setText(lastdate);
+           try{
+               String splitt[] = date.split(" ");               
+                String lastdate = splitt[2] + "." + splitt[1] + "." + splitt[5];                
+                bday.setText(lastdate);
+           }
+           catch(Exception e){
+               
+           }
         }
     }//GEN-LAST:event_bdayseciciPropertyChange
 
