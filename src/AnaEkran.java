@@ -3,32 +3,32 @@ import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Lenovo
  */
 public class AnaEkran extends javax.swing.JFrame {
 
-   
-
     /**
      * Creates new form AnaEkran
      */
-    public Login login =new Login();
+    public Login login = new Login();
     public Karsilama karsilama = new Karsilama();
+    Management management = new Management();
+
     public AnaEkran() {
         Main.ekranX = (int) Main.kit.getScreenSize().width; //Ekran boyutunun genişliğini alıyoruz...
         Main.ekranY = (int) Main.kit.getScreenSize().height;//Ekran boyutunun yüksekliğini alıyoruz...          
         this.setVisible(true);
         this.setResizable(true);
-        this.setSize(800,600);
+        this.setSize(800, 600);
         this.add(karsilama);
         this.setLocation((Main.ekranX - 800) / 2, (Main.ekranY - 600) / 2);
         karsilama.setVisible(true);
@@ -40,7 +40,8 @@ public class AnaEkran extends javax.swing.JFrame {
         karsilama.setVisible(false);
         this.add(login);
         login.setVisible(true);
-        
+
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     /**
@@ -81,7 +82,6 @@ public class AnaEkran extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

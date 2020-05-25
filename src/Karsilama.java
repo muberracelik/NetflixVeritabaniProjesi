@@ -9,7 +9,6 @@ import javax.swing.JLabel;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Lenovo
@@ -21,9 +20,10 @@ public class Karsilama extends javax.swing.JPanel {
      */
     public Karsilama() {
         JLabel karsilama = new JLabel();
-      karsilama.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/karsilama1.gif")));
-      this.add(karsilama);
+        karsilama.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/karsilama1.gif")));
+        this.add(karsilama);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
