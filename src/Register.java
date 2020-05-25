@@ -767,7 +767,7 @@ public class Register extends javax.swing.JPanel {
 
     private void bdayseciciPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_bdayseciciPropertyChange
         yapildimi++;
-        if (yapildimi > 1) {
+        if (yapildimi > 2) {
             String date = String.valueOf(bdaysecici.getDate());
            try{
                String splitt[] = date.split(" ");               
