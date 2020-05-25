@@ -1,6 +1,10 @@
 
 import java.awt.Color;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 
@@ -730,10 +734,34 @@ public class Register extends javax.swing.JPanel {
             hata = true;
         }
         if (hata == false) {
-            jPanel1.setVisible(false);
-            jPanel3.setVisible(false);
-            jPanel2.setVisible(true);
+
+            String mailSorgu = "select mail from kullanici where mail=\"" + eposta.getText() + "\"";
+            try {//kullanıcı zaten mevcutsa
+                ResultSet rs = Main.statement.executeQuery(mailSorgu);
+                String mail = rs.getString("mail");
+                System.out.println(mail);
+                eposta.setForeground(Color.red);
+                eposta.setText("*Zaten Aramızdasın");
+
+            } catch (SQLException ex) {//kullanıcı yoksa ekleme kısmı
+                String kayit = "INSERT INTO kullanici(uname, mail, pwd, bdate)"
+                        + "VALUES('" + isim.getText() + "', '" + eposta.getText() + "', '" + String.valueOf(parola.getPassword()) + "','" + bday.getText() + "')";
+                System.out.println(kayit);
+
+                try {
+                    Main.statement.executeUpdate(kayit);
+                    jPanel1.setVisible(false);
+                    jPanel3.setVisible(false);
+                    jPanel2.setVisible(true);
+
+                } catch (SQLException ex1) {
+                    Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+
+            }
+
         }
+
 
     }//GEN-LAST:event_okIconMouseClicked
 
