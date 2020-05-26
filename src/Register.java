@@ -769,14 +769,13 @@ public class Register extends javax.swing.JPanel {
         yapildimi++;
         if (yapildimi > 2) {
             String date = String.valueOf(bdaysecici.getDate());
-           try{
-               String splitt[] = date.split(" ");               
-                String lastdate = splitt[2] + "." + splitt[1] + "." + splitt[5];                
+            try {
+                String splitt[] = date.split(" ");
+                String lastdate = splitt[2] + "." + splitt[1] + "." + splitt[5];
                 bday.setText(lastdate);
-           }
-           catch(Exception e){
-               
-           }
+            } catch (Exception e) {
+
+            }
         }
     }//GEN-LAST:event_bdayseciciPropertyChange
 
@@ -847,7 +846,84 @@ public class Register extends javax.swing.JPanel {
         } else {
             jPanel1.setVisible(false);
             jPanel2.setVisible(false);
-            jPanel3.setVisible(true);
+            jPanel3.setVisible(true);   
+            tur1.setText(secilenTurler.get(0));
+            tur2.setText(secilenTurler.get(1));
+            tur3.setText(secilenTurler.get(2));
+            String sorgu = "select * from program where pid IN(select pid FROM progtur where tid=(SELECT tid from tur WHERE tname=\""+secilenTurler.get(0)+"\")) ORDER BY puan DESC LIMIT 0,2";
+            try {
+                ResultSet rs = Main.statement.executeQuery(sorgu);
+                rs.next();
+                String isim = rs.getString("pname");
+                String sayi = rs.getString("bolumSayisi");
+                String puan = rs.getString("puan");
+                String sure = rs.getString("size")+"dk.";
+                filmIsmi1.setText(isim);
+                bolumSayisi1.setText(sayi);
+                puan1.setText(puan);
+                sure1.setText(sure);
+                rs.next();
+                isim = rs.getString("pname");
+                sayi = rs.getString("bolumSayisi");
+                puan = rs.getString("puan");
+                sure = rs.getString("size")+"dk.";
+                filmIsmi4.setText(isim);
+                bolumSayisi4.setText(sayi);
+                puan4.setText(puan);
+                sure4.setText(sure);
+            } catch (SQLException ex) {
+                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+            }
+             sorgu = "select * from program where pid IN(select pid FROM progtur where tid=(SELECT tid from tur WHERE tname=\""+secilenTurler.get(1)+"\")) ORDER BY puan DESC LIMIT 0,2";
+            try {
+                ResultSet rs = Main.statement.executeQuery(sorgu);
+                rs.next();
+                String isim = rs.getString("pname");
+                String sayi = rs.getString("bolumSayisi");
+                String puan = rs.getString("puan");
+                String sure = rs.getString("size")+"dk.";
+                filmIsmi2.setText(isim);
+                bolumSayisi2.setText(sayi);
+                puan2.setText(puan);
+                sure2.setText(sure);
+                rs.next();
+                isim = rs.getString("pname");
+                sayi = rs.getString("bolumSayisi");
+                puan = rs.getString("puan");
+                sure = rs.getString("size")+"dk.";
+                filmIsmi5.setText(isim);
+                bolumSayisi5.setText(sayi);
+                puan5.setText(puan);
+                sure5.setText(sure);
+            } catch (SQLException ex) {
+                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            sorgu = "select * from program where pid IN(select pid FROM progtur where tid=(SELECT tid from tur WHERE tname=\""+secilenTurler.get(2)+"\")) ORDER BY puan DESC LIMIT 0,2";
+
+            try {
+                ResultSet rs = Main.statement.executeQuery(sorgu);
+                rs.next();
+                String isim = rs.getString("pname");
+                String sayi = rs.getString("bolumSayisi");
+                String puan = rs.getString("puan");
+                String sure = rs.getString("size")+"dk.";
+                filmIsmi3.setText(isim);
+                bolumSayisi3.setText(sayi);
+                puan3.setText(puan);
+                sure3.setText(sure);
+                rs.next();
+                isim = rs.getString("pname");
+                sayi = rs.getString("bolumSayisi");
+                puan = rs.getString("puan");
+                sure = rs.getString("size")+"dk.";
+                filmIsmi6.setText(isim);
+                bolumSayisi6.setText(sayi);
+                puan6.setText(puan);
+                sure6.setText(sure);
+            } catch (SQLException ex) {
+                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
     }//GEN-LAST:event_gosterMouseClicked
 

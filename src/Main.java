@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Iterator;
@@ -25,7 +26,59 @@ public class Main {
     public static Connection baglanti = null;
     public static Statement statement = null;
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
+    public static void programTablosuOlustur() throws FileNotFoundException, IOException {
+        File dosya = new File("database/veri.xlsx");
+        FileInputStream f = new FileInputStream(dosya);
+        XSSFWorkbook workbook = new XSSFWorkbook(f);
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        Iterator<Row> row = sheet.iterator();
+        int i = 1;
+        while (row.hasNext()) {
+            Row row1 = row.next();
+            Iterator<Cell> satir = row1.cellIterator();
+            Cell sutun = satir.next();
+            String isim = String.valueOf(sutun);
+            sutun = satir.next();
+            String tur = String.valueOf(sutun);
+            sutun = satir.next();
+            String tip = String.valueOf(sutun);
+            sutun = satir.next();
+            String bolumSayisi = String.valueOf((int) Math.round(Double.valueOf(String.valueOf(sutun))));
+            sutun = satir.next();
+            String puan = String.valueOf((int) Math.round(Double.valueOf(String.valueOf(sutun))));
+            sutun = satir.next();
+            String sure = String.valueOf(sutun);
+
+            String dbkayit = "INSERT INTO program(pid,pname, tip, tur, bolumSayisi,size,puan)"
+                    + "VALUES('" + i + "','" + isim + "', '" + tip + "', '" + tur + "','" + bolumSayisi + "','" + sure + "','" + puan + "')";
+
+            try {
+                statement.executeUpdate(dbkayit);
+                i++;
+
+            } catch (SQLException ex1) {
+                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+
+        }
+
+        workbook.close();
+        f.close();
+
+    }
+
+    public static void tabloSifirlama(String tabloIsmi) {
+        String tabloSil = "DELETE FROM " + tabloIsmi;
+        try {
+            statement.executeUpdate(tabloSil);
+
+        } catch (SQLException ex1) {
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex1);
+        }
+    }
+
+    public static void veritabaniBaglama() {
+
         try {
             baglanti = DriverManager.getConnection(db);
             System.out.println("Database'a baglanildi");
@@ -33,25 +86,56 @@ public class Main {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        File dosya = new File("database/veri.xlsx");
-        FileInputStream f = new FileInputStream(dosya);
-        XSSFWorkbook workbook = new XSSFWorkbook(f);
-        XSSFSheet sheet = workbook.getSheetAt(0);
-        Iterator<Row> row = sheet.iterator();
 
-        while (row.hasNext()) {
-            Row row1 = row.next();
-            Iterator<Cell> satir = row1.cellIterator();
-            while (satir.hasNext()) {
-                Cell sutun = satir.next();
-                System.out.print(String.valueOf(sutun)+"-");
+    }
+
+    public static void programTurTablosuOlustur() {
+        String turSorgu = "SELECT tur,pid FROM program";
+        try {
+            
+            ResultSet rs = statement.executeQuery(turSorgu);
+            while (rs.next()) {
+                Statement statement1 = null;
+                statement1 = baglanti.createStatement();
+                String tur = rs.getString("tur");
+                String pid = rs.getString("pid");
+                //System.out.println(tur);
+                String splitt[] = tur.split(",");
+                String tidSorgu;
+                for (int i = 0; i < splitt.length; i++) {
+                    tidSorgu = "SELECT tid FROM tur where tname=" + "\"" + splitt[i] + "\"";                    
+                        ResultSet rs2 = statement1.executeQuery(tidSorgu);
+                        rs2.next();
+                        String tid = rs2.getString("tid");
+                        String dbkayit = "INSERT INTO progtur(pid,tid)"
+                                + "VALUES('" + pid + "','" + tid + "')";
+                        System.out.println(dbkayit);
+
+                        try {
+                            Statement statement2 = null;
+                            statement2 = baglanti.createStatement();
+                            statement2.executeUpdate(dbkayit);
+                            statement2.close();
+
+                        } catch (SQLException ex1) {
+                            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex1);
+                        }                 
+                }
+                statement1.close();
             }
-            System.out.println("");
-        }
-        
-        workbook.close();
-        f.close();
 
+        } catch (SQLException ex) {//kullanıcı yoksa ekleme kısmı}
+
+        }
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        veritabaniBaglama();
+        tabloSifirlama("program");
+        programTablosuOlustur();
+        tabloSifirlama("progtur");
+        programTurTablosuOlustur();
+        
     }
 
 }
