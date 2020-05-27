@@ -1,5 +1,7 @@
+
 import java.sql.ResultSet;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 
 public class Login extends javax.swing.JPanel {
@@ -18,6 +20,33 @@ public class Login extends javax.swing.JPanel {
         soz.setVisible(true);
         okAsagiIcon.setVisible(false);
         kaydol.setText("<html> <p style=\"text-align:center\">Şimdi Aramıza Katıl<p/> </html>");
+    }
+    public void girisYap(){
+         
+            String batu = "select pwd from kullanici where mail=\"" + eposta.getText() + "\"";
+            try {
+                ResultSet rs = Main.statement.executeQuery(batu);
+                String pwd = rs.getString("pwd");
+                if (String.valueOf(parola.getPassword()).equals(pwd)) {
+                    Management management = new Management();
+                    management.setSize(Main.ekranX, Main.ekranY);
+                    Main.ekran.setSize(Main.ekranX, Main.ekranY);
+                    Main.ekran.add(management);
+                    management.setVisible(true);
+                    Main.ekran.setLocation(0, 0);
+                    Main.ekran.login.setVisible(false);
+                } else {
+                    hataMesaji.setText("Doğru yazdığından emin misin?");
+                    hataMesaji.setVisible(true);
+                }
+
+            } catch (SQLException ex) {
+                //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                hataMesaji.setText("<html> <p>Üzgünüm böyle biri aramızda yok<p/></html>");
+                hataMesaji.setVisible(true);
+                okAsagiIcon.setVisible(true);
+            }
+        
     }
 
     /**
@@ -72,9 +101,9 @@ public class Login extends javax.swing.JPanel {
         eposta.setForeground(new java.awt.Color(255, 255, 255));
         eposta.setText("E-posta");
         eposta.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        eposta.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                epostaMouseClicked(evt);
+        eposta.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                epostaFocusGained(evt);
             }
         });
         add(eposta);
@@ -89,9 +118,14 @@ public class Login extends javax.swing.JPanel {
         parola.setForeground(new java.awt.Color(255, 255, 255));
         parola.setText("Parola");
         parola.setPreferredSize(new java.awt.Dimension(79, 23));
-        parola.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                parolaMouseClicked(evt);
+        parola.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                parolaFocusGained(evt);
+            }
+        });
+        parola.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                parolaKeyPressed(evt);
             }
         });
         add(parola);
@@ -119,25 +153,10 @@ public class Login extends javax.swing.JPanel {
         okAsagiIcon.setBounds(360, 445, 20, 30);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void epostaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_epostaMouseClicked
-        eposta.setText("");
-        hataMesaji.setVisible(false);
-        okAsagiIcon.setVisible(false);
-    }//GEN-LAST:event_epostaMouseClicked
-
-    private void parolaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parolaMouseClicked
-        parola.setText("");
-        pwdIcon.setVisible(false);
-        okIcon.setVisible(true);
-        parola.setEchoChar('*');
-        hataMesaji.setVisible(false);
-        okAsagiIcon.setVisible(false);
-    }//GEN-LAST:event_parolaMouseClicked
-
     private void kaydolMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kaydolMouseClicked
         pwdIcon.setVisible(true);
         hataMesaji.setVisible(false);
-        okAsagiIcon.setVisible(false);  
+        okAsagiIcon.setVisible(false);
         parola.setEchoChar((char) 0);
         eposta.setText("E-Posta");
         parola.setText("Parola");
@@ -149,32 +168,29 @@ public class Login extends javax.swing.JPanel {
     }//GEN-LAST:event_kaydolMouseClicked
 
     private void okIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okIconMouseClicked
-        String batu = "select pwd from kullanici where mail=\"" + eposta.getText() + "\"";
-        try {
-            ResultSet rs = Main.statement.executeQuery(batu);
-            String pwd = rs.getString("pwd");
-            if (String.valueOf(parola.getPassword()).equals(pwd)) {
-                Management management = new Management();
-                management.setSize(Main.ekranX, Main.ekranY);
-                Main.ekran.setSize(Main.ekranX, Main.ekranY);
-                Main.ekran.add(management);
-                management.setVisible(true);
-                Main.ekran.setLocation(0, 0);
-                Main.ekran.login.setVisible(false);
-            }
-            else{
-                hataMesaji.setText("Doğru yazdığından emin misin?");
-                hataMesaji.setVisible(true);
-            }
-
-        } catch (SQLException ex) {
-            //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-             hataMesaji.setText("<html> <p>Üzgünüm böyle biri aramızda yok<p/></html>");
-             hataMesaji.setVisible(true);
-             okAsagiIcon.setVisible(true);
-        }
-
+        girisYap();
     }//GEN-LAST:event_okIconMouseClicked
+
+    private void parolaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_parolaFocusGained
+        parola.selectAll();
+        pwdIcon.setVisible(false);
+        okIcon.setVisible(true);
+        parola.setEchoChar('*');
+        hataMesaji.setVisible(false);
+        okAsagiIcon.setVisible(false);
+    }//GEN-LAST:event_parolaFocusGained
+
+    private void epostaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_epostaFocusGained
+        eposta.selectAll();
+        hataMesaji.setVisible(false);
+        okAsagiIcon.setVisible(false);
+    }//GEN-LAST:event_epostaFocusGained
+
+    private void parolaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_parolaKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            girisYap();
+        }
+    }//GEN-LAST:event_parolaKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -108,8 +108,7 @@ public class Main {
                         rs2.next();
                         String tid = rs2.getString("tid");
                         String dbkayit = "INSERT INTO progtur(pid,tid)"
-                                + "VALUES('" + pid + "','" + tid + "')";
-                        System.out.println(dbkayit);
+                                + "VALUES('" + pid + "','" + tid + "')";                       
 
                         try {
                             Statement statement2 = null;

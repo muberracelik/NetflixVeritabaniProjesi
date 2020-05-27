@@ -1,5 +1,6 @@
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -53,6 +54,89 @@ public class Register extends javax.swing.JPanel {
             j.setSelected(false);
             secilenTurSayisi--;
         }
+    }
+    
+    public void kayitYap(){
+         boolean hata = false;
+        if (isim.getText().equals("") || isim.getText().equals("Ad-Soyad")) {
+            isim.setForeground(Color.red);
+            isim.setText("*Ad-Soyad giriniz!");
+            hata = true;
+        } else {
+
+        }
+
+        if (bday.getText().equals("") || bday.getText().equals("Doğum Tarihi")) {
+            bday.setForeground(Color.red);
+            bday.setText("*Doğum Tarihi giriniz!");
+            hata = true;
+        } else {
+
+        }
+
+        if (eposta.getText().equals("") || eposta.getText().equals("E-posta")) {
+            eposta.setForeground(Color.red);
+            eposta.setText("*E-Posta giriniz!");
+            hata = true;
+        } else {
+
+        }
+
+        if (String.valueOf(parola.getPassword()).equals("") || String.valueOf(parola.getPassword()).equals("Parola")) {
+            parola.setForeground(Color.red);
+            parola.setEchoChar((char) 0);
+            parola.setText("*Parola giriniz!");
+            hata = true;
+        } else {
+
+        }
+
+        if (String.valueOf(parolaOnay.getPassword()).equals("") || String.valueOf(parolaOnay.getPassword()).equals("Parola Onay")) {
+            parolaOnay.setForeground(Color.red);
+            parolaOnay.setEchoChar((char) 0);
+            parolaOnay.setText("*Parolanızı tekrar giriniz!");
+            hata = true;
+        } else {
+
+        }
+        if (!String.valueOf(parolaOnay.getPassword()).equals(String.valueOf(parola.getPassword()))) {
+            parola.setForeground(Color.red);
+            parolaOnay.setForeground(Color.red);
+            parola.setEchoChar((char) 0);
+            parolaOnay.setEchoChar((char) 0);
+            parola.setText("*Parolalar Uyuşmuyor!");
+            parolaOnay.setText("*Parolalar Uyuşmuyor!");
+            hata = true;
+        }
+        if (hata == false) {
+
+            String mailSorgu = "select mail from kullanici where mail=\"" + eposta.getText() + "\"";
+            try {//kullanıcı zaten mevcutsa
+                ResultSet rs = Main.statement.executeQuery(mailSorgu);
+                String mail = rs.getString("mail");
+                System.out.println(mail);
+                eposta.setForeground(Color.red);
+                eposta.setText("*Zaten Aramızdasın");
+
+            } catch (SQLException ex) {//kullanıcı yoksa ekleme kısmı
+                String kayit = "INSERT INTO kullanici(uname, mail, pwd, bdate)"
+                        + "VALUES('" + isim.getText() + "', '" + eposta.getText() + "', '" + String.valueOf(parola.getPassword()) + "','" + bday.getText() + "')";
+                System.out.println(kayit);
+
+                try {
+                    Main.statement.executeUpdate(kayit);
+                    jPanel1.setVisible(false);
+                    jPanel3.setVisible(false);
+                    jPanel2.setVisible(true);
+
+                } catch (SQLException ex1) {
+                    Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+
+            }
+
+        }
+
     }
 
     /**
@@ -387,7 +471,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(bilimVeDoga);
-        bilimVeDoga.setBounds(40, 170, 150, 25);
+        bilimVeDoga.setBounds(40, 170, 150, 23);
 
         aksiyonveMacera.setBackground(new java.awt.Color(0, 0, 0));
         aksiyonveMacera.setForeground(new java.awt.Color(255, 255, 255));
@@ -398,7 +482,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(aksiyonveMacera);
-        aksiyonveMacera.setBounds(40, 80, 150, 25);
+        aksiyonveMacera.setBounds(40, 80, 150, 23);
 
         romantik.setBackground(new java.awt.Color(0, 0, 0));
         romantik.setForeground(new java.awt.Color(255, 255, 255));
@@ -409,7 +493,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(romantik);
-        romantik.setBounds(300, 80, 150, 25);
+        romantik.setBounds(300, 80, 150, 23);
 
         cocukVeAile.setBackground(new java.awt.Color(0, 0, 0));
         cocukVeAile.setForeground(new java.awt.Color(255, 255, 255));
@@ -420,7 +504,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(cocukVeAile);
-        cocukVeAile.setBounds(40, 140, 150, 25);
+        cocukVeAile.setBounds(40, 140, 150, 23);
 
         realityProgram.setBackground(new java.awt.Color(0, 0, 0));
         realityProgram.setForeground(new java.awt.Color(255, 255, 255));
@@ -431,7 +515,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(realityProgram);
-        realityProgram.setBounds(40, 110, 150, 25);
+        realityProgram.setBounds(40, 110, 150, 23);
 
         belgesel.setBackground(new java.awt.Color(0, 0, 0));
         belgesel.setForeground(new java.awt.Color(255, 255, 255));
@@ -442,7 +526,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(belgesel);
-        belgesel.setBounds(40, 200, 150, 25);
+        belgesel.setBounds(40, 200, 150, 23);
 
         drama.setBackground(new java.awt.Color(0, 0, 0));
         drama.setForeground(new java.awt.Color(255, 255, 255));
@@ -453,7 +537,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(drama);
-        drama.setBounds(300, 140, 150, 25);
+        drama.setBounds(300, 140, 150, 23);
 
         gerilim.setBackground(new java.awt.Color(0, 0, 0));
         gerilim.setForeground(new java.awt.Color(255, 255, 255));
@@ -464,7 +548,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(gerilim);
-        gerilim.setBounds(300, 110, 150, 25);
+        gerilim.setBounds(300, 110, 150, 23);
 
         komedi.setBackground(new java.awt.Color(0, 0, 0));
         komedi.setForeground(new java.awt.Color(255, 255, 255));
@@ -475,7 +559,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(komedi);
-        komedi.setBounds(300, 170, 150, 25);
+        komedi.setBounds(300, 170, 150, 23);
 
         korku.setBackground(new java.awt.Color(0, 0, 0));
         korku.setForeground(new java.awt.Color(255, 255, 255));
@@ -486,7 +570,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(korku);
-        korku.setBounds(300, 200, 150, 25);
+        korku.setBounds(300, 200, 150, 23);
 
         bilimKurgu.setBackground(new java.awt.Color(0, 0, 0));
         bilimKurgu.setForeground(new java.awt.Color(255, 255, 255));
@@ -499,7 +583,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(bilimKurgu);
-        bilimKurgu.setBounds(40, 230, 230, 25);
+        bilimKurgu.setBounds(40, 230, 230, 23);
 
         anime.setBackground(new java.awt.Color(0, 0, 0));
         anime.setForeground(new java.awt.Color(255, 255, 255));
@@ -510,7 +594,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(anime);
-        anime.setBounds(300, 230, 150, 25);
+        anime.setBounds(300, 230, 150, 23);
 
         goster.setBackground(new java.awt.Color(0, 0, 0));
         goster.setFont(new java.awt.Font("Ink Free", 1, 15)); // NOI18N
@@ -534,9 +618,9 @@ public class Register extends javax.swing.JPanel {
         eposta.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
         eposta.setForeground(new java.awt.Color(255, 255, 255));
         eposta.setText("E-posta");
-        eposta.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                epostaMouseClicked(evt);
+        eposta.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                epostaFocusGained(evt);
             }
         });
         jPanel1.add(eposta);
@@ -555,9 +639,14 @@ public class Register extends javax.swing.JPanel {
         parolaOnay.setForeground(new java.awt.Color(255, 255, 255));
         parolaOnay.setText("Parola Onay");
         parolaOnay.setPreferredSize(new java.awt.Dimension(79, 23));
-        parolaOnay.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                parolaOnayMouseClicked(evt);
+        parolaOnay.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                parolaOnayFocusGained(evt);
+            }
+        });
+        parolaOnay.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                parolaOnayKeyPressed(evt);
             }
         });
         jPanel1.add(parolaOnay);
@@ -578,9 +667,9 @@ public class Register extends javax.swing.JPanel {
         bday.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
         bday.setForeground(new java.awt.Color(255, 255, 255));
         bday.setText("Doğum Tarihi");
-        bday.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                bdayMouseClicked(evt);
+        bday.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                bdayFocusGained(evt);
             }
         });
         jPanel1.add(bday);
@@ -594,9 +683,9 @@ public class Register extends javax.swing.JPanel {
         isim.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
         isim.setForeground(new java.awt.Color(255, 255, 255));
         isim.setText("Ad-Soyad");
-        isim.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                isimMouseClicked(evt);
+        isim.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                isimFocusGained(evt);
             }
         });
         jPanel1.add(isim);
@@ -611,9 +700,9 @@ public class Register extends javax.swing.JPanel {
         parola.setForeground(new java.awt.Color(255, 255, 255));
         parola.setText("Parola");
         parola.setPreferredSize(new java.awt.Dimension(79, 23));
-        parola.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                parolaMouseClicked(evt);
+        parola.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                parolaFocusGained(evt);
             }
         });
         jPanel1.add(parola);
@@ -651,118 +740,8 @@ public class Register extends javax.swing.JPanel {
         backIcon.setBounds(0, 0, 50, 50);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void epostaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_epostaMouseClicked
-        eposta.setForeground(Color.white);
-        eposta.setText("");
-    }//GEN-LAST:event_epostaMouseClicked
-
-    private void parolaOnayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parolaOnayMouseClicked
-        parolaOnay.setForeground(Color.white);
-        parolaOnay.setText("");
-        pwdIcon.setVisible(false);
-        parolaOnay.setEchoChar('*');
-    }//GEN-LAST:event_parolaOnayMouseClicked
-
-    private void isimMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_isimMouseClicked
-        isim.setForeground(Color.white);
-        isim.setText("");
-    }//GEN-LAST:event_isimMouseClicked
-
-    private void bdayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bdayMouseClicked
-        bday.setForeground(Color.white);
-        bday.setText("");
-    }//GEN-LAST:event_bdayMouseClicked
-
-    private void parolaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parolaMouseClicked
-        parola.setForeground(Color.white);
-        parola.setText("");
-
-        parola.setEchoChar('*'); //password = JPasswordField
-
-    }//GEN-LAST:event_parolaMouseClicked
-
     private void okIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okIconMouseClicked
-        boolean hata = false;
-        if (isim.getText().equals("") || isim.getText().equals("Ad-Soyad")) {
-            isim.setForeground(Color.red);
-            isim.setText("*Ad-Soyad giriniz!");
-            hata = true;
-        } else {
-
-        }
-
-        if (bday.getText().equals("") || bday.getText().equals("Doğum Tarihi")) {
-            bday.setForeground(Color.red);
-            bday.setText("*Doğum Tarihi giriniz!");
-            hata = true;
-        } else {
-
-        }
-
-        if (eposta.getText().equals("") || eposta.getText().equals("E-posta")) {
-            eposta.setForeground(Color.red);
-            eposta.setText("*E-Posta giriniz!");
-            hata = true;
-        } else {
-
-        }
-
-        if (String.valueOf(parola.getPassword()).equals("") || String.valueOf(parola.getPassword()).equals("Parola")) {
-            parola.setForeground(Color.red);
-            parola.setEchoChar((char) 0);
-            parola.setText("*Parola giriniz!");
-            hata = true;
-        } else {
-
-        }
-
-        if (String.valueOf(parolaOnay.getPassword()).equals("") || String.valueOf(parolaOnay.getPassword()).equals("Parola Onay")) {
-            parolaOnay.setForeground(Color.red);
-            parolaOnay.setEchoChar((char) 0);
-            parolaOnay.setText("*Parolanızı tekrar giriniz!");
-            hata = true;
-        } else {
-
-        }
-        if (!String.valueOf(parolaOnay.getPassword()).equals(String.valueOf(parola.getPassword()))) {
-            parola.setForeground(Color.red);
-            parolaOnay.setForeground(Color.red);
-            parola.setEchoChar((char) 0);
-            parolaOnay.setEchoChar((char) 0);
-            parola.setText("*Parolalar Uyuşmuyor!");
-            parolaOnay.setText("*Parolalar Uyuşmuyor!");
-            hata = true;
-        }
-        if (hata == false) {
-
-            String mailSorgu = "select mail from kullanici where mail=\"" + eposta.getText() + "\"";
-            try {//kullanıcı zaten mevcutsa
-                ResultSet rs = Main.statement.executeQuery(mailSorgu);
-                String mail = rs.getString("mail");
-                System.out.println(mail);
-                eposta.setForeground(Color.red);
-                eposta.setText("*Zaten Aramızdasın");
-
-            } catch (SQLException ex) {//kullanıcı yoksa ekleme kısmı
-                String kayit = "INSERT INTO kullanici(uname, mail, pwd, bdate)"
-                        + "VALUES('" + isim.getText() + "', '" + eposta.getText() + "', '" + String.valueOf(parola.getPassword()) + "','" + bday.getText() + "')";
-                System.out.println(kayit);
-
-                try {
-                    Main.statement.executeUpdate(kayit);
-                    jPanel1.setVisible(false);
-                    jPanel3.setVisible(false);
-                    jPanel2.setVisible(true);
-
-                } catch (SQLException ex1) {
-                    Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex1);
-                }
-
-            }
-
-        }
-
-
+       kayitYap();
     }//GEN-LAST:event_okIconMouseClicked
 
     private void bdayseciciPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_bdayseciciPropertyChange
@@ -926,6 +905,40 @@ public class Register extends javax.swing.JPanel {
 
         }
     }//GEN-LAST:event_gosterMouseClicked
+
+    private void epostaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_epostaFocusGained
+           eposta.setForeground(Color.white);
+           eposta.selectAll();
+    }//GEN-LAST:event_epostaFocusGained
+
+    private void parolaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_parolaFocusGained
+          parola.setForeground(Color.white);
+        parola.selectAll();
+        parola.setEchoChar('*'); //password = JPasswordField
+    }//GEN-LAST:event_parolaFocusGained
+
+    private void parolaOnayFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_parolaOnayFocusGained
+        parolaOnay.setForeground(Color.white);
+        parolaOnay.selectAll();
+        pwdIcon.setVisible(false);
+        parolaOnay.setEchoChar('*');
+    }//GEN-LAST:event_parolaOnayFocusGained
+
+    private void bdayFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_bdayFocusGained
+         bday.setForeground(Color.white);
+        bday.selectAll();
+    }//GEN-LAST:event_bdayFocusGained
+
+    private void isimFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_isimFocusGained
+       isim.setForeground(Color.white);
+        isim.selectAll();
+    }//GEN-LAST:event_isimFocusGained
+
+    private void parolaOnayKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_parolaOnayKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            kayitYap();
+        }
+    }//GEN-LAST:event_parolaOnayKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
