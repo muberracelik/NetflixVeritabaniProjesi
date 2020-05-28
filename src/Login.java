@@ -35,12 +35,13 @@ public class Login extends javax.swing.JPanel {
 
     public void girisYap() {
         if (dogrulama(eposta.getText())) {
-            String batu = "select pwd from kullanici where mail=\"" + eposta.getText() + "\"";
+            String batu = "select pwd,uid from kullanici where mail=\"" + eposta.getText() + "\"";
             try {
                 ResultSet rs = Main.statement.executeQuery(batu);
                 String pwd = rs.getString("pwd");
+                int uid = Integer.valueOf(rs.getString("uid"));
                 if (String.valueOf(parola.getPassword()).equals(pwd)) {
-                    Management management = new Management();
+                    Management management = new Management(uid);
                     management.setSize(Main.ekranX, Main.ekranY);
                     Main.ekran.setSize(Main.ekranX, Main.ekranY);
                     Main.ekran.add(management);

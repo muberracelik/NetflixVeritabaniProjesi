@@ -1,18 +1,28 @@
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class Management extends javax.swing.JPanel {
 
     DefaultListModel model = new DefaultListModel();
     DefaultListModel sonucModel = new DefaultListModel();
+    public int turProgramSayisi = 0;
 
     public void dbTurCek() {
         String turSorgu = "SELECT tname FROM tur";
@@ -47,7 +57,81 @@ public class Management extends javax.swing.JPanel {
 
     }
 
-    public Management() {
+    public void programAlanOlustur(String turName) {
+        programlarPanel.removeAll();
+        programlarPanel.revalidate();
+        programlarPanel.repaint();
+        String programSorgu = "select COUNT(pid) FROM progtur where tid=(SELECT tid from tur WHERE tname=\"" + turName + "\")";
+        try {
+            ResultSet rs = Main.statement.executeQuery(programSorgu);
+            rs.next();
+            int psayi = rs.getInt(1);
+            turProgramSayisi = psayi;
+            programlarPanel.setPreferredSize(new Dimension(Main.ekranX - (225 + (Main.ekranX / 8)), ((Main.ekranY / 4) * turProgramSayisi / 3) + (Main.ekranY / 4)));
+        } catch (SQLException ex) {
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        ArrayList<JPanel> programlar = new ArrayList();
+        for (int i = 0; i < turProgramSayisi; i++) {
+            JPanel programAlan = new JPanel();
+            programlar.add(programAlan);
+            programAlan.setPreferredSize(new Dimension((Main.ekranX - (225 + (Main.ekranX / 8))) / 3, (Main.ekranY / 4)));
+            programlarPanel.add(programAlan);
+            programAlan.setVisible(true);
+            programAlan.setBackground(Color.black);
+            programAlan.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+
+        }
+        programSorgu = "select * from program where pid IN(select pid FROM progtur where tid=(SELECT tid from tur WHERE tname=\"" + turName + "\"))";
+        try {
+            ResultSet rs = Main.statement.executeQuery(programSorgu);
+            int sayac = 0;
+            while (rs.next()) {
+                String isim = rs.getString("pname");
+                String sayi = rs.getString("bolumSayisi");
+                String puan = rs.getString("puan");
+                String sure = rs.getString("size") + "dk.";
+                String tip = rs.getString("tip");
+                ozellikAta(programlar.get(sayac), isim);
+                ozellikAta(programlar.get(sayac), "Tip: " + tip);
+                ozellikAta(programlar.get(sayac), "Bölüm Sayısı: " + sayi);
+                ozellikAta(programlar.get(sayac), "Puan: " + puan);
+                ozellikAta(programlar.get(sayac), sure);
+                JLabel izle = new JLabel("                         İZLE");
+                izle.setBackground(new java.awt.Color(0, 0, 0));
+                izle.setForeground(new java.awt.Color(255, 255, 255));
+                izle.setFont(new java.awt.Font("Ink Free FB", 1, 30)); // NOI18N
+                izle.addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) {
+                        
+
+                    }
+                });
+                programlar.get(sayac).add(izle);
+                sayac++;
+                
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ozellikAta(JPanel j, String deger) {
+        j.setLayout(new BoxLayout(j, BoxLayout.Y_AXIS));
+        JLabel bir = new javax.swing.JLabel();
+        bir.setBackground(new java.awt.Color(0, 0, 0));
+        bir.setFont(new java.awt.Font("Times New Roman FB", 1, 24)); // NOI18N
+        bir.setForeground(new java.awt.Color(255, 255, 255));
+        bir.setText(deger);
+        j.add(bir);
+        j.add(Box.createVerticalStrut(10));
+    }
+
+    public Management(int id) {
         initComponents();
         this.setBackground(Color.black);
         aramaSonuc.setVisible(false);
@@ -68,6 +152,10 @@ public class Management extends javax.swing.JPanel {
         aramaSonuc.getVerticalScrollBar().setBackground(Color.black);
         aramaSonuc.getHorizontalScrollBar().setForeground(Color.black);
         aramaSonuc.getHorizontalScrollBar().setBackground(Color.black);
+        programlar.setLocation((Main.ekranX) / 8, 0);
+        programlar.setSize(Main.ekranX - (225 + (Main.ekranX / 8)), Main.ekranY - 40);
+        programlarPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        programlarPanel.setPreferredSize(new Dimension(Main.ekranX - (225 + (Main.ekranX / 8)), Main.ekranY));
     }
 
     /**
@@ -85,6 +173,8 @@ public class Management extends javax.swing.JPanel {
         aramaIcon = new javax.swing.JLabel();
         aramaSonuc = new javax.swing.JScrollPane();
         sonuc = new javax.swing.JList<>();
+        programlar = new javax.swing.JScrollPane();
+        programlarPanel = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(1870, 900));
         setLayout(null);
@@ -93,6 +183,11 @@ public class Management extends javax.swing.JPanel {
         list.setForeground(new java.awt.Color(153, 153, 153));
         list.setModel(model);
         list.setVisibleRowCount(15);
+        list.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listValueChanged(evt);
+            }
+        });
         turler.setViewportView(list);
 
         add(turler);
@@ -134,6 +229,16 @@ public class Management extends javax.swing.JPanel {
 
         add(aramaSonuc);
         aramaSonuc.setBounds(730, 40, 180, 330);
+
+        programlar.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        programlar.setPreferredSize(new java.awt.Dimension(50, 50));
+
+        programlarPanel.setBackground(new java.awt.Color(0, 0, 0));
+        programlarPanel.setLayout(null);
+        programlar.setViewportView(programlarPanel);
+
+        add(programlar);
+        programlar.setBounds(70, 0, 380, 290);
     }// </editor-fold>//GEN-END:initComponents
 
     private void aramaTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_aramaTextKeyReleased
@@ -154,12 +259,18 @@ public class Management extends javax.swing.JPanel {
         aramaSonuc.setVisible(true);
     }//GEN-LAST:event_aramaTextKeyPressed
 
+    private void listValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listValueChanged
+        programAlanOlustur(list.getSelectedValue());
+    }//GEN-LAST:event_listValueChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel aramaIcon;
     private javax.swing.JScrollPane aramaSonuc;
     private javax.swing.JTextField aramaText;
     private javax.swing.JList<String> list;
+    private javax.swing.JScrollPane programlar;
+    private javax.swing.JPanel programlarPanel;
     private javax.swing.JList<String> sonuc;
     private javax.swing.JScrollPane turler;
     // End of variables declaration//GEN-END:variables
