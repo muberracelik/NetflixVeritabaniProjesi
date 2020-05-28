@@ -134,7 +134,6 @@ public class Main {
         programTablosuOlustur();
         tabloSifirlama("progtur");
         programTurTablosuOlustur();
-        
     }
 
 }

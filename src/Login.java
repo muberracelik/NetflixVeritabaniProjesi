@@ -3,6 +3,10 @@ import java.sql.ResultSet;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JFrame;
+import javax.swing.SwingConstants;
 
 public class Login extends javax.swing.JPanel {
 
@@ -10,6 +14,12 @@ public class Login extends javax.swing.JPanel {
      * Creates new form Login
      */
     Register register;
+    public final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    public boolean dogrulama(String mail) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(mail);
+        return matcher.find();
+    }
 
     public Login() {
         initComponents();
@@ -20,9 +30,11 @@ public class Login extends javax.swing.JPanel {
         soz.setVisible(true);
         okAsagiIcon.setVisible(false);
         kaydol.setText("<html> <p style=\"text-align:center\">Şimdi Aramıza Katıl<p/> </html>");
+        hataMesaji.setHorizontalAlignment(SwingConstants.CENTER);
     }
-    public void girisYap(){
-         
+
+    public void girisYap() {
+        if (dogrulama(eposta.getText())) {
             String batu = "select pwd from kullanici where mail=\"" + eposta.getText() + "\"";
             try {
                 ResultSet rs = Main.statement.executeQuery(batu);
@@ -32,9 +44,19 @@ public class Login extends javax.swing.JPanel {
                     management.setSize(Main.ekranX, Main.ekranY);
                     Main.ekran.setSize(Main.ekranX, Main.ekranY);
                     Main.ekran.add(management);
-                    management.setVisible(true);
+                    management.setVisible(true);                    
+                    management.setSize(Main.ekranX,Main.ekranY);
                     Main.ekran.setLocation(0, 0);
                     Main.ekran.login.setVisible(false);
+                    Main.ekran.setExtendedState(JFrame.MAXIMIZED_BOTH);         
+                    
+                    try{
+                       Main.ekran.setResizable(true); 
+                       Main.ekran.setUndecorated(true);
+                    }
+                    catch(Exception IllegalComponentStateException){
+                        
+                    }
                 } else {
                     hataMesaji.setText("Doğru yazdığından emin misin?");
                     hataMesaji.setVisible(true);
@@ -42,11 +64,18 @@ public class Login extends javax.swing.JPanel {
 
             } catch (SQLException ex) {
                 //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                hataMesaji.setText("<html> <p>Üzgünüm böyle biri aramızda yok<p/></html>");
-                hataMesaji.setVisible(true);
-                okAsagiIcon.setVisible(true);
+                if (dogrulama(eposta.getText())) {
+                    hataMesaji.setText("<html> <p>Üzgünüm böyle biri aramızda yok<p/></html>");
+                    hataMesaji.setVisible(true);
+                    okAsagiIcon.setVisible(true);
+                }
             }
-        
+        } else {
+            hataMesaji.setText("Geçerli bir e-posta girmelisin");
+            eposta.setForeground(Color.red);
+            hataMesaji.setVisible(true);
+        }
+
     }
 
     /**
@@ -172,6 +201,7 @@ public class Login extends javax.swing.JPanel {
     }//GEN-LAST:event_okIconMouseClicked
 
     private void parolaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_parolaFocusGained
+        hataMesaji.setVisible(true);
         parola.selectAll();
         pwdIcon.setVisible(false);
         okIcon.setVisible(true);
@@ -181,6 +211,8 @@ public class Login extends javax.swing.JPanel {
     }//GEN-LAST:event_parolaFocusGained
 
     private void epostaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_epostaFocusGained
+        eposta.setForeground(Color.white);
+        hataMesaji.setVisible(true);
         eposta.selectAll();
         hataMesaji.setVisible(false);
         okAsagiIcon.setVisible(false);

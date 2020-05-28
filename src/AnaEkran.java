@@ -21,7 +21,6 @@ public class AnaEkran extends javax.swing.JFrame {
      */
     public Login login = new Login();
     public Karsilama karsilama = new Karsilama();
-    Management management = new Management();
 
     public AnaEkran() {
         Main.ekranX = (int) Main.kit.getScreenSize().width; //Ekran boyutunun genişliğini alıyoruz...
@@ -57,10 +56,10 @@ public class AnaEkran extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setLayout(null);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Lenovo\\Desktop\\NetflixVeritabaniProjesi\\src\\images\\vfinal_1 (2).gif")); // NOI18N
         jLabel1.setText("jLabel1");
         jPanel1.add(jLabel1);
         jLabel1.setBounds(0, 0, 860, 520);

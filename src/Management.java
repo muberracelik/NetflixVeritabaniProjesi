@@ -1,21 +1,73 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author Lenovo
- */
+import java.awt.Color;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.SwingConstants;
+
 public class Management extends javax.swing.JPanel {
 
-    /**
-     * Creates new form Management
-     */
+    DefaultListModel model = new DefaultListModel();
+    DefaultListModel sonucModel = new DefaultListModel();
+
+    public void dbTurCek() {
+        String turSorgu = "SELECT tname FROM tur";
+        try {
+            ResultSet rs = Main.statement.executeQuery(turSorgu);
+            while (rs.next()) {
+                String tname = rs.getString("tname");
+                model.addElement(tname);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Management.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void dbProgAra(String progname) {
+        if (!progname.equals("")) {//kullanıcı hiçbirşey girmezse boşuna sorgu yapılmaz.
+            String progSorgu = "SELECT pname FROM program where pname like " + "\'%" + progname + "%\'";
+            try {
+                ResultSet rs = Main.statement.executeQuery(progSorgu);
+                while (rs.next()) {
+                    String pname = rs.getString("pname");
+                    sonucModel.addElement(pname);
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Management.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            aramaSonuc.setVisible(false);
+        }
+
+    }
+
     public Management() {
         initComponents();
-        arkaPlan.setSize(Main.ekranX, Main.ekranY);
+        this.setBackground(Color.black);
+        aramaSonuc.setVisible(false);
+        turler.setSize((Main.ekranX) / 8, (Main.ekranY));
+        aramaIcon.setLocation(Main.ekranX - 225, 0);
+        aramaText.setLocation(Main.ekranX - 180, 0);
+        aramaSonuc.setLocation(Main.ekranX - 180, 40);
+        list.setModel(model);
+        list.setFixedCellHeight(50);
+        DefaultListCellRenderer renderer = (DefaultListCellRenderer) list.getCellRenderer();
+        renderer.setHorizontalAlignment(SwingConstants.CENTER);
+        sonuc.setModel(sonucModel);
+        sonuc.setFixedCellHeight(30);
+        DefaultListCellRenderer renderer1 = (DefaultListCellRenderer) list.getCellRenderer();
+        renderer.setHorizontalAlignment(SwingConstants.CENTER);
+        dbTurCek();
+        aramaSonuc.getVerticalScrollBar().setForeground(Color.black);
+        aramaSonuc.getVerticalScrollBar().setBackground(Color.black);
+        aramaSonuc.getHorizontalScrollBar().setForeground(Color.black);
+        aramaSonuc.getHorizontalScrollBar().setBackground(Color.black);
     }
 
     /**
@@ -27,18 +79,88 @@ public class Management extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        arkaPlan = new javax.swing.JLabel();
+        turler = new javax.swing.JScrollPane();
+        list = new javax.swing.JList<>();
+        aramaText = new javax.swing.JTextField();
+        aramaIcon = new javax.swing.JLabel();
+        aramaSonuc = new javax.swing.JScrollPane();
+        sonuc = new javax.swing.JList<>();
 
         setPreferredSize(new java.awt.Dimension(1870, 900));
         setLayout(null);
 
-        arkaPlan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/anasayfa.png"))); // NOI18N
-        add(arkaPlan);
-        arkaPlan.setBounds(0, 0, 1870, 900);
+        list.setBackground(new java.awt.Color(0, 0, 0));
+        list.setForeground(new java.awt.Color(153, 153, 153));
+        list.setModel(model);
+        list.setVisibleRowCount(15);
+        turler.setViewportView(list);
+
+        add(turler);
+        turler.setBounds(0, 0, 70, 250);
+
+        aramaText.setBackground(new java.awt.Color(0, 0, 0));
+        aramaText.setForeground(new java.awt.Color(255, 255, 255));
+        aramaText.setMargin(new java.awt.Insets(6, 2, 2, 2));
+        aramaText.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                aramaTextFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                aramaTextFocusLost(evt);
+            }
+        });
+        aramaText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                aramaTextKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                aramaTextKeyReleased(evt);
+            }
+        });
+        add(aramaText);
+        aramaText.setBounds(730, 0, 180, 40);
+
+        aramaIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arama.jpg"))); // NOI18N
+        add(aramaIcon);
+        aramaIcon.setBounds(680, 0, 40, 40);
+
+        aramaSonuc.setBackground(new java.awt.Color(0, 0, 0));
+        aramaSonuc.setForeground(new java.awt.Color(153, 153, 153));
+
+        sonuc.setBackground(new java.awt.Color(0, 0, 0));
+        sonuc.setForeground(new java.awt.Color(255, 255, 255));
+        sonuc.setModel(sonucModel);
+        aramaSonuc.setViewportView(sonuc);
+
+        add(aramaSonuc);
+        aramaSonuc.setBounds(730, 40, 180, 330);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void aramaTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_aramaTextKeyReleased
+        sonucModel.clear();
+        dbProgAra(aramaText.getText());
+    }//GEN-LAST:event_aramaTextKeyReleased
+
+    private void aramaTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_aramaTextFocusGained
+        aramaSonuc.setVisible(true);
+    }//GEN-LAST:event_aramaTextFocusGained
+
+    private void aramaTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_aramaTextFocusLost
+        aramaSonuc.setVisible(false);
+    }//GEN-LAST:event_aramaTextFocusLost
+
+    private void aramaTextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_aramaTextKeyPressed
+
+        aramaSonuc.setVisible(true);
+    }//GEN-LAST:event_aramaTextKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel arkaPlan;
+    private javax.swing.JLabel aramaIcon;
+    private javax.swing.JScrollPane aramaSonuc;
+    private javax.swing.JTextField aramaText;
+    private javax.swing.JList<String> list;
+    private javax.swing.JList<String> sonuc;
+    private javax.swing.JScrollPane turler;
     // End of variables declaration//GEN-END:variables
 }

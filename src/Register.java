@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 
@@ -26,7 +28,12 @@ public class Register extends javax.swing.JPanel {
     int yapildimi = 0;
     int secilenTurSayisi = 0;
     ArrayList<String> secilenTurler = new ArrayList<>();
+    public final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
+    public boolean dogrulama(String mail) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(mail);
+        return matcher.find();
+    }
     public Register() {
         initComponents();
         this.setBackground(Color.BLACK);
@@ -36,9 +43,9 @@ public class Register extends javax.swing.JPanel {
         jPanel3.setVisible(false);
         soz.setText("<html> <p style=\"text-align:center\">EN FAVORİ DİZİ VE FİLMLER İÇİN<p/> </html>");
         soz1.setText("<html> <p>SEVDİĞİN 3  TÜRÜ SEÇ<p/> </html>");
+        tur3.setHorizontalAlignment(SwingConstants.CENTER);
         tur1.setHorizontalAlignment(SwingConstants.CENTER);
         tur2.setHorizontalAlignment(SwingConstants.CENTER);
-        tur3.setHorizontalAlignment(SwingConstants.CENTER);
     }
 
     public void kontrol(JCheckBox j) { // 3 ten fazla tür secilmesini engellemek icin yazilan fonksiyon
@@ -57,7 +64,7 @@ public class Register extends javax.swing.JPanel {
     }
     
     public void kayitYap(){
-         boolean hata = false;
+        boolean hata = false;
         if (isim.getText().equals("") || isim.getText().equals("Ad-Soyad")) {
             isim.setForeground(Color.red);
             isim.setText("*Ad-Soyad giriniz!");
@@ -79,7 +86,10 @@ public class Register extends javax.swing.JPanel {
             eposta.setText("*E-Posta giriniz!");
             hata = true;
         } else {
-
+            if(!dogrulama(eposta.getText())){
+                eposta.setForeground(Color.red);
+                hata=true;
+            }
         }
 
         if (String.valueOf(parola.getPassword()).equals("") || String.valueOf(parola.getPassword()).equals("Parola")) {
@@ -155,9 +165,9 @@ public class Register extends javax.swing.JPanel {
         jSeparator4 = new javax.swing.JSeparator();
         jSeparator5 = new javax.swing.JSeparator();
         girisYap = new javax.swing.JLabel();
+        tur3 = new javax.swing.JLabel();
         tur1 = new javax.swing.JLabel();
         tur2 = new javax.swing.JLabel();
-        tur3 = new javax.swing.JLabel();
         filmIsmi1 = new javax.swing.JLabel();
         bolumSayisi1 = new javax.swing.JLabel();
         sure1 = new javax.swing.JLabel();
@@ -246,32 +256,32 @@ public class Register extends javax.swing.JPanel {
         jPanel3.add(girisYap);
         girisYap.setBounds(690, 520, 100, 40);
 
+        tur3.setBackground(new java.awt.Color(0, 0, 0));
+        tur3.setFont(new java.awt.Font("Ink Free", 1, 16)); // NOI18N
+        tur3.setForeground(new java.awt.Color(153, 153, 153));
+        tur3.setText("TÜR3");
+        tur3.setToolTipText("");
+        tur3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel3.add(tur3);
+        tur3.setBounds(540, 10, 260, 50);
+
         tur1.setBackground(new java.awt.Color(0, 0, 0));
         tur1.setFont(new java.awt.Font("Ink Free", 1, 16)); // NOI18N
         tur1.setForeground(new java.awt.Color(153, 153, 153));
-        tur1.setText("TÜR3");
+        tur1.setText("TÜR1");
         tur1.setToolTipText("");
         tur1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jPanel3.add(tur1);
-        tur1.setBounds(540, 10, 260, 50);
+        tur1.setBounds(0, 10, 270, 50);
 
         tur2.setBackground(new java.awt.Color(0, 0, 0));
         tur2.setFont(new java.awt.Font("Ink Free", 1, 16)); // NOI18N
         tur2.setForeground(new java.awt.Color(153, 153, 153));
-        tur2.setText("TÜR1");
+        tur2.setText("TÜR2");
         tur2.setToolTipText("");
         tur2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jPanel3.add(tur2);
-        tur2.setBounds(0, 10, 270, 50);
-
-        tur3.setBackground(new java.awt.Color(0, 0, 0));
-        tur3.setFont(new java.awt.Font("Ink Free", 1, 16)); // NOI18N
-        tur3.setForeground(new java.awt.Color(153, 153, 153));
-        tur3.setText("TÜR2");
-        tur3.setToolTipText("");
-        tur3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel3.add(tur3);
-        tur3.setBounds(270, 10, 260, 50);
+        tur2.setBounds(270, 10, 260, 50);
 
         filmIsmi1.setBackground(new java.awt.Color(0, 0, 0));
         filmIsmi1.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
@@ -471,7 +481,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(bilimVeDoga);
-        bilimVeDoga.setBounds(40, 170, 150, 23);
+        bilimVeDoga.setBounds(40, 170, 150, 25);
 
         aksiyonveMacera.setBackground(new java.awt.Color(0, 0, 0));
         aksiyonveMacera.setForeground(new java.awt.Color(255, 255, 255));
@@ -482,7 +492,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(aksiyonveMacera);
-        aksiyonveMacera.setBounds(40, 80, 150, 23);
+        aksiyonveMacera.setBounds(40, 80, 150, 25);
 
         romantik.setBackground(new java.awt.Color(0, 0, 0));
         romantik.setForeground(new java.awt.Color(255, 255, 255));
@@ -493,7 +503,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(romantik);
-        romantik.setBounds(300, 80, 150, 23);
+        romantik.setBounds(300, 80, 150, 25);
 
         cocukVeAile.setBackground(new java.awt.Color(0, 0, 0));
         cocukVeAile.setForeground(new java.awt.Color(255, 255, 255));
@@ -504,7 +514,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(cocukVeAile);
-        cocukVeAile.setBounds(40, 140, 150, 23);
+        cocukVeAile.setBounds(40, 140, 150, 25);
 
         realityProgram.setBackground(new java.awt.Color(0, 0, 0));
         realityProgram.setForeground(new java.awt.Color(255, 255, 255));
@@ -515,7 +525,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(realityProgram);
-        realityProgram.setBounds(40, 110, 150, 23);
+        realityProgram.setBounds(40, 110, 150, 25);
 
         belgesel.setBackground(new java.awt.Color(0, 0, 0));
         belgesel.setForeground(new java.awt.Color(255, 255, 255));
@@ -526,7 +536,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(belgesel);
-        belgesel.setBounds(40, 200, 150, 23);
+        belgesel.setBounds(40, 200, 150, 25);
 
         drama.setBackground(new java.awt.Color(0, 0, 0));
         drama.setForeground(new java.awt.Color(255, 255, 255));
@@ -537,7 +547,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(drama);
-        drama.setBounds(300, 140, 150, 23);
+        drama.setBounds(300, 140, 150, 25);
 
         gerilim.setBackground(new java.awt.Color(0, 0, 0));
         gerilim.setForeground(new java.awt.Color(255, 255, 255));
@@ -548,7 +558,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(gerilim);
-        gerilim.setBounds(300, 110, 150, 23);
+        gerilim.setBounds(300, 110, 150, 25);
 
         komedi.setBackground(new java.awt.Color(0, 0, 0));
         komedi.setForeground(new java.awt.Color(255, 255, 255));
@@ -559,7 +569,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(komedi);
-        komedi.setBounds(300, 170, 150, 23);
+        komedi.setBounds(300, 170, 150, 25);
 
         korku.setBackground(new java.awt.Color(0, 0, 0));
         korku.setForeground(new java.awt.Color(255, 255, 255));
@@ -570,7 +580,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(korku);
-        korku.setBounds(300, 200, 150, 23);
+        korku.setBounds(300, 200, 150, 25);
 
         bilimKurgu.setBackground(new java.awt.Color(0, 0, 0));
         bilimKurgu.setForeground(new java.awt.Color(255, 255, 255));
@@ -583,7 +593,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(bilimKurgu);
-        bilimKurgu.setBounds(40, 230, 230, 23);
+        bilimKurgu.setBounds(40, 230, 230, 25);
 
         anime.setBackground(new java.awt.Color(0, 0, 0));
         anime.setForeground(new java.awt.Color(255, 255, 255));
@@ -594,7 +604,7 @@ public class Register extends javax.swing.JPanel {
             }
         });
         jPanel2.add(anime);
-        anime.setBounds(300, 230, 150, 23);
+        anime.setBounds(300, 230, 150, 25);
 
         goster.setBackground(new java.awt.Color(0, 0, 0));
         goster.setFont(new java.awt.Font("Ink Free", 1, 15)); // NOI18N
@@ -746,7 +756,7 @@ public class Register extends javax.swing.JPanel {
 
     private void bdayseciciPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_bdayseciciPropertyChange
         yapildimi++;
-        if (yapildimi > 2) {
+        if (yapildimi > 1) {
             String date = String.valueOf(bdaysecici.getDate());
             try {
                 String splitt[] = date.split(" ");
