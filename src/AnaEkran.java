@@ -32,14 +32,14 @@ public class AnaEkran extends javax.swing.JFrame {
         this.setLocation((Main.ekranX - 800) / 2, (Main.ekranY - 600) / 2);
         karsilama.setVisible(true);
         try {
-            Thread.sleep(0);
+            Thread.sleep(2500);
         } catch (InterruptedException ex) {
             Logger.getLogger(AnaEkran.class.getName()).log(Level.SEVERE, null, ex);
         }
         karsilama.setVisible(false);
         this.add(login);
         login.setVisible(true);
-
+        this.setTitle("MTFLİX");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 

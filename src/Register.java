@@ -129,8 +129,9 @@ public class Register extends javax.swing.JPanel {
                 eposta.setText("*Zaten Aramızdasın");
 
             } catch (SQLException ex) {//kullanıcı yoksa ekleme kısmı
-                String kayit = "INSERT INTO kullanici(uname, mail, pwd, bdate)"
-                        + "VALUES('" + isim.getText() + "', '" + eposta.getText() + "', '" + String.valueOf(parola.getPassword()) + "','" + bday.getText() + "')";
+                String kayit = "INSERT INTO kullanici(uid,uname, mail, pwd, bdate)"
+                        + "VALUES('" + ++Main.kisiSayisi + "','" + isim.getText() + "', '" + eposta.getText() + "', '" + String.valueOf(parola.getPassword()) + "','" + bday.getText() + "')";
+                
                 System.out.println(kayit);
 
                 try {

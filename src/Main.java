@@ -25,7 +25,7 @@ public class Main {
     public static String db = "jdbc:sqlite:database/netflix.db";
     public static Connection baglanti = null;
     public static Statement statement = null;
-
+    static int kisiSayisi=0;
     public static void programTablosuOlustur() throws FileNotFoundException, IOException {
         File dosya = new File("database/veri.xlsx");
         FileInputStream f = new FileInputStream(dosya);
@@ -85,6 +85,15 @@ public class Main {
             statement = baglanti.createStatement();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+         String kisiSorgu = "select COUNT(uid) FROM kullanici";//kisi sayisini alma kısmı
+        try {
+             ResultSet rs = Main.statement.executeQuery(kisiSorgu);
+             rs.next();
+             kisiSayisi = rs.getInt(1);;
+            
+        } catch (SQLException ex1) {
+            kisiSayisi=0;
         }
 
     }
