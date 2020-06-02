@@ -8,18 +8,12 @@ import java.util.regex.Pattern;
 import javax.swing.JFrame;
 import javax.swing.SwingConstants;
 
-public class Login extends javax.swing.JPanel {
+public class Login extends javax.swing.JPanel {     // kullanıcının oturum açacağı panel( maindeki anaEkran Jframe'ine eklenir);
 
-    /**
-     * Creates new form Login
-     */
-    Register register;
+    Register register;  //  kullanıcı kayıt olmak isterse register objesi bu değişkene atanır.
+
+    // kullanıcının girdiği e-postanın kontrolü için kullanılan regex
     public final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
-    public boolean dogrulama(String mail) {
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(mail);
-        return matcher.find();
-    }
 
     public Login() {
         initComponents();
@@ -33,45 +27,49 @@ public class Login extends javax.swing.JPanel {
         hataMesaji.setHorizontalAlignment(SwingConstants.CENTER);
     }
 
-    public void girisYap() {
-        if (dogrulama(eposta.getText())) {
+    public boolean dogrulama(String mail) { // kullanıcının girdiği e-postanın kontrolü
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(mail);
+        return matcher.find();
+    }
+
+    public void girisYap() {    // kullanıcı entere basarsa yada giriş ikonuna basarsa gerçekleşecek fonksiyon
+        if (dogrulama(eposta.getText())) { // geçerli bir regexe sahipse bu işlemler gerçeklerşir, değilse program yorulmaz.
             String batu = "select pwd,uid from kullanici where mail=\"" + eposta.getText() + "\"";
-            try {
+            try {   // kullanıcı veritabanına kayıtlıysa gerçekleşen işlemler
                 ResultSet rs = Main.statement.executeQuery(batu);
                 String pwd = rs.getString("pwd");
                 int uid = Integer.valueOf(rs.getString("uid"));
-                if (String.valueOf(parola.getPassword()).equals(pwd)) {
+                if (String.valueOf(parola.getPassword()).equals(pwd)) { // kullanıcının e-postası ve şifresi eşleşiyorsa
                     Management management = new Management(uid);
                     management.setSize(Main.ekranX, Main.ekranY);
                     Main.ekran.setSize(Main.ekranX, Main.ekranY);
                     Main.ekran.add(management);
-                    management.setVisible(true);                    
-                    management.setSize(Main.ekranX,Main.ekranY);
+                    management.setVisible(true);
+                    management.setSize(Main.ekranX, Main.ekranY);
                     Main.ekran.setLocation(0, 0);
                     Main.ekran.login.setVisible(false);
-                    Main.ekran.setExtendedState(JFrame.MAXIMIZED_BOTH);         
-                    
-                    try{
-                       Main.ekran.setResizable(true); 
-                       Main.ekran.setUndecorated(true);
+                    Main.ekran.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+                    try {
+                        Main.ekran.setResizable(true);
+                        Main.ekran.setUndecorated(true);
+                    } catch (Exception IllegalComponentStateException) {
+                        System.out.println(IllegalComponentStateException.getMessage());
                     }
-                    catch(Exception IllegalComponentStateException){
-                        
-                    }
-                } else {
+                } else {    // kullanıcının şifresi yanlışsa gerçekleşenler
                     hataMesaji.setText("Doğru yazdığından emin misin?");
                     hataMesaji.setVisible(true);
                 }
 
-            } catch (SQLException ex) {
-                //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) { // kullanıcı veritabanına kayıtlı değilse gerçekleşen işlemler
+
                 if (dogrulama(eposta.getText())) {
                     hataMesaji.setText("<html> <p>Üzgünüm böyle biri aramızda yok<p/></html>");
                     hataMesaji.setVisible(true);
                     okAsagiIcon.setVisible(true);
                 }
             }
-        } else {
+        } else {    //kullanıcının e-postası regexe uymuyorsa
             hataMesaji.setText("Geçerli bir e-posta girmelisin");
             eposta.setForeground(Color.red);
             hataMesaji.setVisible(true);
@@ -190,10 +188,12 @@ public class Login extends javax.swing.JPanel {
         parola.setEchoChar((char) 0);
         eposta.setText("E-Posta");
         parola.setText("Parola");
-        register = new Register();
+
+        register = new Register();  //kullanıcı için yeni bir kayıt sayfası açılır.
+
         this.setVisible(true);
         this.setSize(800, 600);
-        Main.ekran.add(register);
+        Main.ekran.add(register);   //kayıt sayfası maindeki anaEkran Jframe ine eklenir ve setVisible True
         Main.ekran.login.setVisible(false);
     }//GEN-LAST:event_kaydolMouseClicked
 
@@ -220,7 +220,7 @@ public class Login extends javax.swing.JPanel {
     }//GEN-LAST:event_epostaFocusGained
 
     private void parolaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_parolaKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) { //kullanıcı parola ksımındayken entere basarsa giriş kontrolü gerçekleşir.
             girisYap();
         }
     }//GEN-LAST:event_parolaKeyPressed

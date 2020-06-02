@@ -9,31 +9,15 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author Lenovo
- */
 public class Register extends javax.swing.JPanel {
 
-    /**
-     * Creates new form Login
-     */
-    int yapildimi = 0;
-    int secilenTurSayisi = 0;
-    ArrayList<String> secilenTurler = new ArrayList<>();
-    public final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    int yapildimi = 0; // tarih seçme bileşeninin bugundan dolayı ilk girişte  bdayseciciPropertyChange direk çalışıyor bunun olumsuz sonuçlarını engellemek için
+    int secilenTurSayisi = 0; // kullanıcının 3 ten fazla beğenilen tür seçememesi için
+    ArrayList<String> secilenTurler = new ArrayList<>();    // kullanıcının seçtiği 3 türün tutulduğu liste
 
-    public boolean dogrulama(String mail) {
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(mail);
-        return matcher.find();
-    }
     public Register() {
         initComponents();
         this.setBackground(Color.BLACK);
@@ -48,7 +32,15 @@ public class Register extends javax.swing.JPanel {
         tur2.setHorizontalAlignment(SwingConstants.CENTER);
     }
 
-    public void kontrol(JCheckBox j) { // 3 ten fazla tür secilmesini engellemek icin yazilan fonksiyon
+    // kullanıcının girdiği e-postanın kontrolü için kullanılan regex
+    public final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    public boolean dogrulama(String mail) { // kullanıcının girdiği e-postanın kontrolü
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(mail);
+        return matcher.find();
+    }
+
+    public void turKontrol(JCheckBox j) { // Kullanıcın seçtiği türleri listeye ekleyen ve 3 ten fazla tür secilmesini engellemek icin yazilan fonksiyon
         if (j.isSelected()) {
             if (secilenTurSayisi < 3) {
                 secilenTurSayisi++;
@@ -62,10 +54,12 @@ public class Register extends javax.swing.JPanel {
             secilenTurSayisi--;
         }
     }
-    
-    public void kayitYap(){
-        boolean hata = false;
-        if (isim.getText().equals("") || isim.getText().equals("Ad-Soyad")) {
+
+    public void kayitYap() {    // kullanıcının girdiği bilgileri kontrol edip veritabanına kullanıcıyı ekleme fonksiyonu
+        
+        boolean hata = false;   // kullanıcı herhangi bir isterde hata yaparsa bu değişken true olur ve kayıt engellenir.
+        
+        if (isim.getText().equals("") || isim.getText().equals("Ad-Soyad")) {   // kullanıcının isim girmediyse
             isim.setForeground(Color.red);
             isim.setText("*Ad-Soyad giriniz!");
             hata = true;
@@ -73,7 +67,7 @@ public class Register extends javax.swing.JPanel {
 
         }
 
-        if (bday.getText().equals("") || bday.getText().equals("Doğum Tarihi")) {
+        if (bday.getText().equals("") || bday.getText().equals("Doğum Tarihi")) { // kullanıcı doğum tarihi girmediyse
             bday.setForeground(Color.red);
             bday.setText("*Doğum Tarihi giriniz!");
             hata = true;
@@ -81,18 +75,18 @@ public class Register extends javax.swing.JPanel {
 
         }
 
-        if (eposta.getText().equals("") || eposta.getText().equals("E-posta")) {
+        if (eposta.getText().equals("") || eposta.getText().equals("E-posta")) { // kullanıcının e posta girmediyse, yada regexe aykırı girdiyse
             eposta.setForeground(Color.red);
             eposta.setText("*E-Posta giriniz!");
             hata = true;
         } else {
-            if(!dogrulama(eposta.getText())){
+            if (!dogrulama(eposta.getText())) { // kullanıcının girdiği e postanın regexe uygun olup olmadığını kontrol eder.
                 eposta.setForeground(Color.red);
-                hata=true;
+                hata = true;
             }
         }
 
-        if (String.valueOf(parola.getPassword()).equals("") || String.valueOf(parola.getPassword()).equals("Parola")) {
+        if (String.valueOf(parola.getPassword()).equals("") || String.valueOf(parola.getPassword()).equals("Parola")) { // kullanıcı parola girmediyse
             parola.setForeground(Color.red);
             parola.setEchoChar((char) 0);
             parola.setText("*Parola giriniz!");
@@ -101,7 +95,7 @@ public class Register extends javax.swing.JPanel {
 
         }
 
-        if (String.valueOf(parolaOnay.getPassword()).equals("") || String.valueOf(parolaOnay.getPassword()).equals("Parola Onay")) {
+        if (String.valueOf(parolaOnay.getPassword()).equals("") || String.valueOf(parolaOnay.getPassword()).equals("Parola Onay")) { // kullanıcı parola onayını girmediyse
             parolaOnay.setForeground(Color.red);
             parolaOnay.setEchoChar((char) 0);
             parolaOnay.setText("*Parolanızı tekrar giriniz!");
@@ -109,7 +103,7 @@ public class Register extends javax.swing.JPanel {
         } else {
 
         }
-        if (!String.valueOf(parolaOnay.getPassword()).equals(String.valueOf(parola.getPassword()))) {
+        if (!String.valueOf(parolaOnay.getPassword()).equals(String.valueOf(parola.getPassword()))) { // kullanıcının girdiği parolalar uyuşmuyorsa
             parola.setForeground(Color.red);
             parolaOnay.setForeground(Color.red);
             parola.setEchoChar((char) 0);
@@ -118,20 +112,22 @@ public class Register extends javax.swing.JPanel {
             parolaOnay.setText("*Parolalar Uyuşmuyor!");
             hata = true;
         }
-        if (hata == false) {
+        
+        
+        if (hata == false) {        // kullanıcının girdiği bilgilerde hata yoksa ve kullanıcı zaten kayıtlı değilse  kayıt işlemi gerçekleşir
 
             String mailSorgu = "select mail from kullanici where mail=\"" + eposta.getText() + "\"";
-            try {//kullanıcı zaten mevcutsa
+            try {   //kullanıcı veritabannda zaten mevcutsa
                 ResultSet rs = Main.statement.executeQuery(mailSorgu);
                 String mail = rs.getString("mail");
                 System.out.println(mail);
                 eposta.setForeground(Color.red);
                 eposta.setText("*Zaten Aramızdasın");
 
-            } catch (SQLException ex) {//kullanıcı yoksa ekleme kısmı
+            } catch (SQLException ex) { //kullanıcı veritabanında yoksa ekleme kısmı
                 String kayit = "INSERT INTO kullanici(uid,uname, mail, pwd, bdate)"
                         + "VALUES('" + ++Main.kisiSayisi + "','" + isim.getText() + "', '" + eposta.getText() + "', '" + String.valueOf(parola.getPassword()) + "','" + bday.getText() + "')";
-                
+
                 System.out.println(kayit);
 
                 try {
@@ -149,7 +145,61 @@ public class Register extends javax.swing.JPanel {
         }
 
     }
+    
+    // kullanıcının tercih ettiği tür için 2şer tane en yüksek puanlı program atanır.
+    public void tureGoreProgramAtama(String turIsmi,JLabel isimLabel1,JLabel bolumLabel1,JLabel puanLabel1,JLabel sureLabel1,JLabel isimLabel2,JLabel bolumLabel2,JLabel puanLabel2,JLabel sureLabel2){
+            String sorgu = "select * from program where pid IN(select pid FROM progtur where tid=(SELECT tid from tur WHERE tname=\"" + turIsmi + "\")) ORDER BY puan DESC LIMIT 0,2";
+            try {
+                ResultSet rs = Main.statement.executeQuery(sorgu);
+                rs.next();
+                String isimLocal = rs.getString("pname");
+                String sayi = rs.getString("bolumSayisi");
+                String puan = rs.getString("puan");
+                String sure = rs.getString("size") + "dk.";
+                isimLabel1.setText(isimLocal);
+                    isimLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24));
+                bolumLabel1.setText("Bölüm sayısı: "+sayi);
+                bolumLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24));
+                puanLabel1.setText("Puan: "+puan);
+                puanLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24));
+                sureLabel1.setText("Süre: "+sure);
+                sureLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24));
+                rs.next();
+                isimLocal = rs.getString("pname");
+                sayi = rs.getString("bolumSayisi");
+                puan = rs.getString("puan");
+                sure = rs.getString("size") + "dk.";
+                isimLabel2.setText(isimLocal);
+                isimLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24));
+                bolumLabel2.setText("Bölüm sayısı: "+sayi);
+                bolumLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24));
+                puanLabel2.setText("Puan: "+puan);
+                puanLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24));
+                sureLabel2.setText("Süre: "+sure);
+                sureLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24));
+            } catch (SQLException ex) {
+                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    public void kullanıcıTureGoreProgramOneri(){ // kullanıcın seçtiği 3 türe göre 6 tane öneri program çıkaran fonksiyon
+        if (secilenTurSayisi < 3) { // seçilen tür sayısı 3 olmadıkça işlem gerçekleşmez
 
+        } else {                    // seçilen tür sayısı 3 olmadıkça işlem gerçekleşmez
+            jPanel1.setVisible(false);
+            jPanel2.setVisible(false);
+            jPanel3.setVisible(true);
+            tur1.setText(secilenTurler.get(0));
+            tur2.setText(secilenTurler.get(1));
+            tur3.setText(secilenTurler.get(2));
+            // üç tür içinde 2şer tane en yüksek puanlı program atanır
+            tureGoreProgramAtama(secilenTurler.get(0),filmIsmi1,bolumSayisi1,puan1,sure1,filmIsmi4,bolumSayisi4,puan4,sure4);
+            tureGoreProgramAtama(secilenTurler.get(1),filmIsmi2,bolumSayisi2,puan2,sure2,filmIsmi5,bolumSayisi5,puan5,sure5);
+            tureGoreProgramAtama(secilenTurler.get(2),filmIsmi3,bolumSayisi3,puan3,sure3,filmIsmi6,bolumSayisi6,puan6,sure6);
+            
+
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -752,12 +802,12 @@ public class Register extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okIconMouseClicked
-       kayitYap();
+        kayitYap();
     }//GEN-LAST:event_okIconMouseClicked
 
     private void bdayseciciPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_bdayseciciPropertyChange
-        yapildimi++;
-        if (yapildimi > 1) {
+        yapildimi++;    // tarih seçme bileşeninin bugundan dolayı ilk girişte  bdayseciciPropertyChange direk çalışıyor bunun olumsuz sonuçlarını engellemek için
+        if (yapildimi > 1) {    // tarih seçme bileşeninin bugundan dolayı ilk girişte  bdayseciciPropertyChange direk çalışıyor bunun olumsuz sonuçlarını engellemek için
             String date = String.valueOf(bdaysecici.getDate());
             try {
                 String splitt[] = date.split(" ");
@@ -776,51 +826,51 @@ public class Register extends javax.swing.JPanel {
     }//GEN-LAST:event_backIconMouseClicked
 
     private void aksiyonveMaceraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aksiyonveMaceraActionPerformed
-        kontrol(aksiyonveMacera);
+        turKontrol(aksiyonveMacera);
     }//GEN-LAST:event_aksiyonveMaceraActionPerformed
 
     private void realityProgramActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_realityProgramActionPerformed
-        kontrol(realityProgram);
+        turKontrol(realityProgram);
     }//GEN-LAST:event_realityProgramActionPerformed
 
     private void cocukVeAileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cocukVeAileActionPerformed
-        kontrol(cocukVeAile);
+        turKontrol(cocukVeAile);
     }//GEN-LAST:event_cocukVeAileActionPerformed
 
     private void bilimVeDogaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bilimVeDogaActionPerformed
-        kontrol(bilimVeDoga);
+        turKontrol(bilimVeDoga);
     }//GEN-LAST:event_bilimVeDogaActionPerformed
 
     private void belgeselActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_belgeselActionPerformed
-        kontrol(belgesel);
+        turKontrol(belgesel);
     }//GEN-LAST:event_belgeselActionPerformed
 
     private void bilimKurguActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bilimKurguActionPerformed
-        kontrol(bilimKurgu);
+        turKontrol(bilimKurgu);
     }//GEN-LAST:event_bilimKurguActionPerformed
 
     private void romantikActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_romantikActionPerformed
-        kontrol(romantik);
+        turKontrol(romantik);
     }//GEN-LAST:event_romantikActionPerformed
 
     private void gerilimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gerilimActionPerformed
-        kontrol(gerilim);
+        turKontrol(gerilim);
     }//GEN-LAST:event_gerilimActionPerformed
 
     private void dramaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dramaActionPerformed
-        kontrol(drama);
+        turKontrol(drama);
     }//GEN-LAST:event_dramaActionPerformed
 
     private void komediActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_komediActionPerformed
-        kontrol(komedi);
+        turKontrol(komedi);
     }//GEN-LAST:event_komediActionPerformed
 
     private void korkuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_korkuActionPerformed
-        kontrol(korku);
+        turKontrol(korku);
     }//GEN-LAST:event_korkuActionPerformed
 
     private void animeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_animeActionPerformed
-        kontrol(anime);
+        turKontrol(anime);
     }//GEN-LAST:event_animeActionPerformed
 
     private void girisYapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_girisYapMouseClicked
@@ -831,99 +881,16 @@ public class Register extends javax.swing.JPanel {
     }//GEN-LAST:event_girisYapMouseClicked
 
     private void gosterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gosterMouseClicked
-        if (secilenTurSayisi < 3) {
-
-        } else {
-            jPanel1.setVisible(false);
-            jPanel2.setVisible(false);
-            jPanel3.setVisible(true);   
-            tur1.setText(secilenTurler.get(0));
-            tur2.setText(secilenTurler.get(1));
-            tur3.setText(secilenTurler.get(2));
-            String sorgu = "select * from program where pid IN(select pid FROM progtur where tid=(SELECT tid from tur WHERE tname=\""+secilenTurler.get(0)+"\")) ORDER BY puan DESC LIMIT 0,2";
-            try {
-                ResultSet rs = Main.statement.executeQuery(sorgu);
-                rs.next();
-                String isim = rs.getString("pname");
-                String sayi = rs.getString("bolumSayisi");
-                String puan = rs.getString("puan");
-                String sure = rs.getString("size")+"dk.";
-                filmIsmi1.setText(isim);
-                bolumSayisi1.setText(sayi);
-                puan1.setText(puan);
-                sure1.setText(sure);
-                rs.next();
-                isim = rs.getString("pname");
-                sayi = rs.getString("bolumSayisi");
-                puan = rs.getString("puan");
-                sure = rs.getString("size")+"dk.";
-                filmIsmi4.setText(isim);
-                bolumSayisi4.setText(sayi);
-                puan4.setText(puan);
-                sure4.setText(sure);
-            } catch (SQLException ex) {
-                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
-            }
-             sorgu = "select * from program where pid IN(select pid FROM progtur where tid=(SELECT tid from tur WHERE tname=\""+secilenTurler.get(1)+"\")) ORDER BY puan DESC LIMIT 0,2";
-            try {
-                ResultSet rs = Main.statement.executeQuery(sorgu);
-                rs.next();
-                String isim = rs.getString("pname");
-                String sayi = rs.getString("bolumSayisi");
-                String puan = rs.getString("puan");
-                String sure = rs.getString("size")+"dk.";
-                filmIsmi2.setText(isim);
-                bolumSayisi2.setText(sayi);
-                puan2.setText(puan);
-                sure2.setText(sure);
-                rs.next();
-                isim = rs.getString("pname");
-                sayi = rs.getString("bolumSayisi");
-                puan = rs.getString("puan");
-                sure = rs.getString("size")+"dk.";
-                filmIsmi5.setText(isim);
-                bolumSayisi5.setText(sayi);
-                puan5.setText(puan);
-                sure5.setText(sure);
-            } catch (SQLException ex) {
-                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            sorgu = "select * from program where pid IN(select pid FROM progtur where tid=(SELECT tid from tur WHERE tname=\""+secilenTurler.get(2)+"\")) ORDER BY puan DESC LIMIT 0,2";
-
-            try {
-                ResultSet rs = Main.statement.executeQuery(sorgu);
-                rs.next();
-                String isim = rs.getString("pname");
-                String sayi = rs.getString("bolumSayisi");
-                String puan = rs.getString("puan");
-                String sure = rs.getString("size")+"dk.";
-                filmIsmi3.setText(isim);
-                bolumSayisi3.setText(sayi);
-                puan3.setText(puan);
-                sure3.setText(sure);
-                rs.next();
-                isim = rs.getString("pname");
-                sayi = rs.getString("bolumSayisi");
-                puan = rs.getString("puan");
-                sure = rs.getString("size")+"dk.";
-                filmIsmi6.setText(isim);
-                bolumSayisi6.setText(sayi);
-                puan6.setText(puan);
-                sure6.setText(sure);
-            } catch (SQLException ex) {
-                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
+        kullanıcıTureGoreProgramOneri();
     }//GEN-LAST:event_gosterMouseClicked
 
     private void epostaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_epostaFocusGained
-           eposta.setForeground(Color.white);
-           eposta.selectAll();
+        eposta.setForeground(Color.white);
+        eposta.selectAll();
     }//GEN-LAST:event_epostaFocusGained
 
     private void parolaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_parolaFocusGained
-          parola.setForeground(Color.white);
+        parola.setForeground(Color.white);
         parola.selectAll();
         parola.setEchoChar('*'); //password = JPasswordField
     }//GEN-LAST:event_parolaFocusGained
@@ -936,12 +903,12 @@ public class Register extends javax.swing.JPanel {
     }//GEN-LAST:event_parolaOnayFocusGained
 
     private void bdayFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_bdayFocusGained
-         bday.setForeground(Color.white);
+        bday.setForeground(Color.white);
         bday.selectAll();
     }//GEN-LAST:event_bdayFocusGained
 
     private void isimFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_isimFocusGained
-       isim.setForeground(Color.white);
+        isim.setForeground(Color.white);
         isim.selectAll();
     }//GEN-LAST:event_isimFocusGained
 

@@ -1,35 +1,25 @@
 
-import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author Lenovo
- */
-public class AnaEkran extends javax.swing.JFrame {
+public class AnaEkran extends javax.swing.JFrame {  // Tüm pencere güncellemelerinin gerçekleştiği Jframe
 
-    /**
-     * Creates new form AnaEkran
-     */
-    public Login login = new Login();
-    public Karsilama karsilama = new Karsilama();
+    public Karsilama karsilama = new Karsilama();   // giriş introsu
+    public Login login = new Login();               // login ekranı
 
     public AnaEkran() {
-        Main.ekranX = (int) Main.kit.getScreenSize().width; //Ekran boyutunun genişliğini alıyoruz...
-        Main.ekranY = (int) Main.kit.getScreenSize().height;//Ekran boyutunun yüksekliğini alıyoruz...          
+        Main.ekranX = (int) Main.kit.getScreenSize().width;     // kullanıcının Ekran boyutunun genişliğini alıyoruz...
+        Main.ekranY = (int) Main.kit.getScreenSize().height;    // kullanıcının Ekran boyutunun yüksekliğini alıyoruz...          
         this.setVisible(true);
         this.setResizable(true);
         this.setSize(800, 600);
         this.add(karsilama);
         this.setLocation((Main.ekranX - 800) / 2, (Main.ekranY - 600) / 2);
+
         karsilama.setVisible(true);
         try {
             Thread.sleep(2500);
@@ -37,10 +27,30 @@ public class AnaEkran extends javax.swing.JFrame {
             Logger.getLogger(AnaEkran.class.getName()).log(Level.SEVERE, null, ex);
         }
         karsilama.setVisible(false);
+
         this.add(login);
         login.setVisible(true);
+
         this.setTitle("MTFLİX");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        this.addWindowListener(new WindowAdapter() {    // kullanıcı programı kapatınca veri tabanı bağlantıları kapatılır.
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    Main.baglanti.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(AnaEkran.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    Main.statement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(AnaEkran.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        );
+
     }
 
     /**
