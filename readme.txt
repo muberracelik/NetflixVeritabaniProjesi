@@ -17,7 +17,7 @@ test edilmiştir.
 KULLANIM NOTLARI:
 --------------------------------------------------------------------------------------
 
-								--HAZIRLIK--
+				    --HAZIRLIK--
 0-	Uygulama jar dosyası ile çalıştırılır. Eğer bir geliştirme ortamı üzerinde
 çalıştırılmak istenirse; Main metodu "Main.java" sınıfının içinde olup,
 çalıştırmak için bu sınıf "main class" olarak belirlenmelidir. 
@@ -26,7 +26,7 @@ KULLANIM NOTLARI:
 değiştirilip ve database klasörünün içine atılmalıdır.
 									
 									
-							  --OTURUM AÇMA--	
+				   --OTURUM AÇMA--	
 2-	Uygulama çalıştırıldığında "Login arayüzü" kullanıcıyı karşılar. Kullanıcı eğer 
 daha önce kayıt olduysa e-posta ve şifresi ile giriş yapabilir. Kullanıcının girdiği
 bilgiler veritabanındaki veriler ile eşleşiyorsa kullanıcının karşısına kullanıcının
@@ -36,7 +36,7 @@ olmak isterse arayüzün en altında bulunan "Şimdi Aramıza Katıl" butonuna b
 kayıt sayfasına gidebilir.
 
 
-								--KAYIT--
+				     --KAYIT--
 3-	Kayıt arayüzünde kullanıcıdan kayıt için gerekli bilgileri girmesi istenir.
 Doğum tarihini girmek için ilgili bölümün sağ kısmında tarih seçici bir buton 
 bulunmaktadır kullanıcı dilerse burdan kolay bir şekilde doğum tarihini seçebilir.
@@ -51,7 +51,7 @@ karşısına her türden 2'şer tane en yüksek puan alan program çıkar.
 programı kapatabilir. Kayıt işlemi tamamlandı.
 
 
-						  --KULLANICI OTURUM YÖNETİMİ""
+			   --KULLANICI OTURUM YÖNETİMİ""
 4-	Kullanıcı başarılı bir şekilde oturum açtıktan sonra karşısına kullanıcı yönetim 
 arayüzü çıkar.
 
